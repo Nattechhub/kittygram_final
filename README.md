@@ -1,3 +1,4 @@
+![example workflow](https://github.com/Nattechhub/kittygram_final/actions/workflows/main.yml/badge.svg)
 #  Как работать с репозиторием финального задания
 
 ## Что нужно сделать
