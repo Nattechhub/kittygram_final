@@ -161,16 +161,14 @@ jobs:
     needs: deploy
     if: github.ref == 'refs/heads/main'
     steps:
-    - name: Set up Git
-      run: echo "Git is already set up"
     - name: Get commit message and author
       run: |
         COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
         COMMIT_AUTHOR="${{ github.event.head_commit.author.name }}"
         COMMIT_LINK="https://github.com/${{ github.repository }}/commit/${{ github.sha }}"
-        echo "::set-env name=COMMIT_MESSAGE::$COMMIT_MESSAGE"
-        echo "::set-env name=COMMIT_AUTHOR::$COMMIT_AUTHOR"
-        echo "::set-env name=COMMIT_LINK::$COMMIT_LINK"
+        echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
+        echo "COMMIT_AUTHOR=$COMMIT_AUTHOR" >> $GITHUB_ENV
+        echo "COMMIT_LINK=$COMMIT_LINK" >> $GITHUB_ENV
     - name: Send message
       uses: appleboy/telegram-action@master
       with:
@@ -182,8 +180,3 @@ jobs:
           Сообщение коммита: ${{ env.COMMIT_MESSAGE }}
           Автор коммита: ${{ env.COMMIT_AUTHOR }}
           [Ссылка на коммит](${{ env.COMMIT_LINK }})
-      env:
-        COMMIT_MESSAGE: ${{ env.COMMIT_MESSAGE }}
-        COMMIT_AUTHOR: ${{ env.COMMIT_AUTHOR }}
-        COMMIT_LINK: ${{ env.COMMIT_LINK }}
-
