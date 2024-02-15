@@ -161,9 +161,14 @@ jobs:
     needs: deploy
     if: github.ref == 'refs/heads/main'
     steps:
+    - name: Check if repository is cloned
+      run: '[ -d .git ]'
+      continue-on-error: true
     - name: Set up Git
+      if: success()
       run: git fetch --no-tags --prune --depth=1 origin +refs/heads/main
     - name: Get commit message and author
+      if: success()
       run: |
         COMMIT_MESSAGE=$(git log --format=%B -n 1 ${{ github.sha }})
         COMMIT_AUTHOR=$(git log --format=%an -n 1 ${{ github.sha }})
@@ -172,6 +177,7 @@ jobs:
         echo "::set-env name=COMMIT_AUTHOR::$COMMIT_AUTHOR"
         echo "::set-env name=COMMIT_LINK::$COMMIT_LINK"
     - name: Send message
+      if: success()
       uses: appleboy/telegram-action@master
       with:
         to: ${{ secrets.TELEGRAM_TO }}
